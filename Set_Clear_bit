@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdint.h>
+
+uint8_t modify_bit(uint8_t reg, int pos, int mode) {
+    if (pos < 0 || pos > 7) {
+        return reg; // Out-of-bounds bit position guard
+    }
+
+    switch (mode) {
+        case 0: // Clear bit
+            reg &= ~(1U << pos);
+            break;
+        case 1: // Set bit
+            reg |= (1U << pos);
+            break;
+        case 2: // Toggle bit (useful addition)
+            reg ^= (1U << pos);
+            break;
+        default:
+            // Invalid mode, return unchanged
+            break;
+    }
+
+    return reg;
+}
+
+int main(void) {
+    uint8_t reg;
+    int pos, mode;
+
+    printf("Enter register value (0-255), bit position (0-7), and mode (0=Clear, 1=Set, 2=Toggle): ");
+    if (scanf("%hhu %d %d", &reg, &pos, &mode) == 3) {
+        printf("Result: %u (0x%02X)\n", modify_bit(reg, pos, mode), modify_bit(reg, pos, mode));
+    }
+
+    return 0;
+}
